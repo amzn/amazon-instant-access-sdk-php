@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="instant-access-sdk-php" default="release" basedir=".">
+
+    <property name="package" value="${phing.project.name}" override="true"/>
+    <property name="dir.base" value="${project.basedir}" override="true"/>
+    <property name="dir.build" value="${dir.base}/build" override="true"/>
+    <property name="dir.log" value="${dir.build}/log" override="true"/>
+    <property name="dir.coverage" value="${dir.build}/coverage" override="true"/>
+    <property name="dir.doc" value="${dir.build}/doc" override="true"/>
+    <property name="dir.src" value="${dir.base}/src" override="true"/>
+    <property name="dir.test" value="${dir.base}/tst" override="true"/>
+    <property name="dir.vendor" value="${dir.base}/vendor" override="true"/>
+
+    <target name="clean" description="Deletes build artifacts">
+        <delete dir="${dir.build}"/>
+    </target>
+
+    <target name="prepare" depends="clean">
+        <mkdir dir="${dir.build}"/>
+        <mkdir dir="${dir.log}"/>
+        <mkdir dir="${dir.coverage}"/>
+        <mkdir dir="${dir.doc}"/>
+    </target>
+
+    <target name="verify" depends="prepare, phpcs">
+    </target>
+
+    <target name="release" depends="test, phar, test-phar">
+    </target>
+
+    <target name="test" description="Run unit tests" depends="verify">
+        <exec command="${dir.vendor}/bin/phpunit --configuration phpunit.xml --coverage-html=${dir.coverage}" passthru="true" checkreturn="true"/>
+    </target>
+
+    <target name="test-phar" description="Run unit tests againts the phar file" depends="phar">
+        <exec command="${dir.vendor}/bin/phpunit --configuration phpunit-phar.xml" passthru="true" checkreturn="true"/>
+    </target>
+
+    <target name="phar" description="Create a phar with an autoloader" depends="verify">
+        <!-- Copy phar stub -->
+        <copy todir="${dir.build}">
+            <fileset dir="${dir.base}">
+                <include name="phar-stub.php"/>
+            </fileset>
+        </copy>
+        <pharpackage destfile="${dir.build}/${package}.phar" stub="${dir.build}/phar-stub.php" basedir="${dir.base}">
+            <fileset dir="${dir.base}">
+                <!-- Add SDK classes -->
+                <include name="src/**/*.php"/>
+                <!-- Include the Symfony2 class loader component -->
+                <include name="vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php"/>
+                <!-- Include dependencies -->
+                <include name="vendor/psr/log/**/*.php"/>
+                <include name="vendor/monolog/monolog/src/**/*.php"/>
+            </fileset>
+        </pharpackage>
+    </target>
+
+    <target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer">
+        <phpcodesniffer standard="PSR2" tabWidth="4" encoding="UTF-8" haltonerror="true">
+            <fileset dir="${dir.src}">
+                <include name="**/*.php"/>
+            </fileset>
+            <fileset dir="${dir.test}">
+                <include name="**/*.php"/>
+            </fileset>
+            <formatter type="checkstyle" outfile="${dir.build}/checkstyle.xml"/>
+            <formatter type="summary" usefile="false"/>
+        </phpcodesniffer>
+    </target>
+
+    <target name="phpdoc" description="Generates PHPDoc files">
+        <phpdoc2 title="Instant Access PHP SDK - API Documentation" destdir="${dir.doc}" defaultPackageName="Amazon" template="responsive-twig">
+            <fileset dir="${dir.src}">
+                <include name="**/*.php"/>
+            </fileset>
+        </phpdoc2>
+    </target>
+</project>
