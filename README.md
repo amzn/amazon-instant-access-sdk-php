@@ -28,8 +28,7 @@ $credentialStore->load('secret public');
 
 $controller = new AccountLinkingController($credentialStore);
 
-$controller->onGetUserId(function ($req) use($queryFactory) {
-	$q = $queryFactory->newInstance();
+$controller->onGetUserId(function ($req) {
 	
 	// stuff amazon sends us
 	$email_req = $req->getInfoField1();
@@ -78,7 +77,7 @@ $credentialStore->load('secret public');
 
 $controller = new PurchaseController($credentialStore);
 
-$controller->onSubscriptionActivate(function ($req) use($queryFactory,$az_products) {
+$controller->onSubscriptionActivate(function ($req) {
 	$res = new SubscriptionActivateResponse();
 
 	$req_user_id = $req->getUserId();
@@ -118,7 +117,7 @@ $controller->onSubscriptionActivate(function ($req) use($queryFactory,$az_produc
 
 });
 
-$controller->onSubscriptionDeactivate(function ($req) use($queryFactory) {
+$controller->onSubscriptionDeactivate(function ($req) {
 	$res = new SubscriptionDeactivateResponse();
 
 	$az_subscription_id = $req->getSubscriptionId();
