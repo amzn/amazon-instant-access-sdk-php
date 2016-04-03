@@ -7,7 +7,7 @@ onboard with the AIA system.
 ## Example Usage
 
 ### az_link.php
-```
+```php
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -56,7 +56,7 @@ echo $response;
 ```
 
 ### az_fulfill.php
-```
+```php
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -140,8 +140,9 @@ echo $response;
 
 
 ```
+
 ### az_register.php
-```
+```php
 <?php
 
 $amazon_redirect_url = $_GET['redirectUrl'];
