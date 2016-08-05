@@ -26,4 +26,5 @@ abstract class SubscriptionActivateResponseValue extends Enum
     const FAIL_USER_INVALID         = 'FAIL_USER_INVALID';
     const FAIL_USER_NOT_ELIGIBLE    = 'FAIL_USER_NOT_ELIGIBLE';
     const FAIL_OTHER                = 'FAIL_OTHER';
+    const FAIL_INVALID_SUBSCRIPTION = 'FAIL_INVALID_SUBSCRIPTION';
 }

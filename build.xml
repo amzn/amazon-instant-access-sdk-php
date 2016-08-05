@@ -48,7 +48,7 @@
                 <!-- Add SDK classes -->
                 <include name="src/**/*.php"/>
                 <!-- Include the Symfony2 class loader component -->
-                <include name="vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php"/>
+                <include name="vendor/symfony/class-loader/ClassLoader.php"/>
                 <!-- Include dependencies -->
                 <include name="vendor/psr/log/**/*.php"/>
                 <include name="vendor/monolog/monolog/src/**/*.php"/>

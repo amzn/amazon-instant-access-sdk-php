@@ -26,6 +26,10 @@ class SubscriptionActivateRequest extends InstantAccessRequest
     protected $productId;
     /** @var string */
     protected $userId;
+    /** @var string */
+    protected $subscriptionGroupId;
+    /** @var integer */
+    protected $numberOfSubscriptionsInGroup;
 
     /**
      * Create a new object from a JSON string.
@@ -41,6 +45,12 @@ class SubscriptionActivateRequest extends InstantAccessRequest
             $newObject->setSubscriptionId($jsonObject->subscriptionId);
             $newObject->setProductId($jsonObject->productId);
             $newObject->setUserId($jsonObject->userId);
+            if (isset($jsonObject->subscriptionGroupId)) {
+                $newObject->setSubscriptionGroupId($jsonObject->subscriptionGroupId);
+            }
+            if (isset($jsonObject->numberOfSubscriptionsInGroup)) {
+                $newObject->setNumberOfSubscriptionsInGroup($jsonObject->numberOfSubscriptionsInGroup);
+            }
         };
 
         $object = parent::createFromJson($jsonString, $callback);
@@ -78,6 +88,28 @@ class SubscriptionActivateRequest extends InstantAccessRequest
     public function setUserId($userId)
     {
         $this->userId = $userId;
+        return $this;
+    }
+
+    public function getSubscriptionGroupId()
+    {
+        return $this->subscriptionGroupId;
+    }
+
+    public function setSubscriptionGroupId($subscriptionGroupId)
+    {
+        $this->subscriptionGroupId = $subscriptionGroupId;
+        return $this;
+    }
+
+    public function getNumberOfSubscriptionsInGroup()
+    {
+        return $this->numberOfSubscriptionsInGroup;
+    }
+
+    public function setNumberOfSubscriptionsInGroup($numberOfSubscriptionsInGroup)
+    {
+        $this->numberOfSubscriptionsInGroup = $numberOfSubscriptionsInGroup;
         return $this;
     }
 }

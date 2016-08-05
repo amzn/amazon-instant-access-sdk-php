@@ -22,3 +22,4 @@ if (!defined('UNIT_TESTING')) define('UNIT_TESTING', true);
 $monolog = new Monolog\Logger('AmazonInstantAccessTest');
 $monolog->pushHandler(new Monolog\Handler\StreamHandler('build/log/test-phar-output.log', Monolog\Logger::DEBUG));
 Amazon\InstantAccess\Log\Logger::setLogger($monolog);
+date_default_timezone_set('UTC');

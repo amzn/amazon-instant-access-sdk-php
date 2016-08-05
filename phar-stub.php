@@ -16,14 +16,16 @@
 
 Phar::mapPhar('instant-access-sdk-php.phar');
 
-require_once 'phar://instant-access-sdk-php.phar/vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+require_once 'phar://instant-access-sdk-php.phar/vendor/symfony/class-loader/ClassLoader.php';
 
-$classLoader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-$classLoader->registerNamespaces(array(
-    'Amazon'  => 'phar://instant-access-sdk-php.phar/src',
-    'Psr'     => 'phar://instant-access-sdk-php.phar/vendor/psr/log',
-    'Monolog' => 'phar://instant-access-sdk-php.phar/vendor/monolog/monolog/src'
-));
+$classLoader = new Symfony\Component\ClassLoader\ClassLoader();
+
+// register classes with namespaces
+$classLoader->addPrefix('Amazon',   'phar://instant-access-sdk-php.phar/src');
+$classLoader->addPrefix('Psr',      'phar://instant-access-sdk-php.phar/vendor/psr/log');
+$classLoader->addPrefix('Monolog',  'phar://instant-access-sdk-php.phar/vendor/monolog/monolog/src');
+
+// activate the autoloader
 $classLoader->register();
 
 return $classLoader;

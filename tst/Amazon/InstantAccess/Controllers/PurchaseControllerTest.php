@@ -182,6 +182,45 @@ class PurchaseControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('{"response":"FAIL_USER_INVALID"}', $response);
     }
 
+    public function testSubscriptionActivateTeamSubsV1()
+    {
+        $server = array();
+        $server['HTTP_HOST'] = 'amazon.com';
+        $server['SERVER_PROTOCOL'] = 'HTTP/1.1';
+        $server['SERVER_PORT'] = '80';
+        $server['REQUEST_URI'] = '/';
+        $server['REQUEST_METHOD'] = 'POST';
+        $server['CONTENT_TYPE'] = 'application/json';
+
+        $content = '{
+                "operation":                        "SubscriptionActivate",
+                "subscriptionId":                   "subscriptionId",
+                "productId":                        "GamePack1",
+                "userId":                           "1234",
+                "subscriptionGroupId":              "group1234",
+                "numberOfSubscriptionsInGroup":     "4"
+        }';
+
+        $request = $this->generateSignedRequest($server, $content);
+
+        $body = tmpfile();
+        fwrite($body, $content);
+        fseek($body, 0);
+
+        $controller = new PurchaseController(self::$credentialStore);
+
+        $controller->onSubscriptionActivate(function ($req) {
+                $res = new SubscriptionActivateResponse();
+                $res->setResponse(SubscriptionActivateResponseValue::FAIL_INVALID_SUBSCRIPTION);
+                return $res;
+        });
+
+        $response = $controller->process($server, IOUtils::getFilePathFromHandle($body));
+
+        $this->assertNotNull($response);
+        $this->assertEquals('{"response":"FAIL_INVALID_SUBSCRIPTION"}', $response);
+    }
+
     public function testSubscriptionDeactivate()
     {
         $server = array();
